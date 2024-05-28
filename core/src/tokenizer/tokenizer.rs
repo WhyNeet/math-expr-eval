@@ -1,4 +1,4 @@
-use super::{token::Token, utils::is_operation};
+use super::token::{Operation, Parenthesis, Token};
 
 pub fn tokenize(input: &str) -> Vec<Token> {
     let mut result = Vec::new();
@@ -13,21 +13,21 @@ pub fn tokenize(input: &str) -> Vec<Token> {
                 number_acc.push(c);
                 continue;
             }
-            c if is_operation(c) => {
+            parenthesis if parenthesis == '(' || parenthesis == ')' => {
                 if !number_acc.is_empty() {
                     result.push(Token::Number(number_acc.parse().unwrap()));
                     number_acc = String::new();
                 }
 
-                result.push(Token::from(c));
+                result.push(Token::Parenthesis(Parenthesis::from(parenthesis)));
             }
-            other => {
+            operation => {
                 if !number_acc.is_empty() {
                     result.push(Token::Number(number_acc.parse().unwrap()));
                     number_acc = String::new();
                 }
 
-                result.push(Token::from(other));
+                result.push(Token::Operation(Operation::from(operation)));
             }
         }
     }

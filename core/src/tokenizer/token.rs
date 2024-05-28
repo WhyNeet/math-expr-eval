@@ -8,11 +8,17 @@ pub enum Operation {
 }
 
 #[derive(Debug)]
+pub enum Parenthesis {
+    Left,
+    Right,
+    Unknown(char),
+}
+
+#[derive(Debug)]
 pub enum Token {
     Number(f64),
     Operation(Operation),
-    LeftParenthesis,
-    RightParenthesis,
+    Parenthesis(Parenthesis),
 }
 
 impl From<char> for Operation {
@@ -27,13 +33,12 @@ impl From<char> for Operation {
     }
 }
 
-impl From<char> for Token {
+impl From<char> for Parenthesis {
     fn from(value: char) -> Self {
         match value {
-            c if char::is_numeric(c) => Token::Number(c.to_string().parse::<f64>().unwrap()),
-            '(' => Token::LeftParenthesis,
-            ')' => Token::RightParenthesis,
-            op => Token::Operation(Operation::from(op)),
+            '(' => Parenthesis::Left,
+            ')' => Parenthesis::Right,
+            other => Parenthesis::Unknown(other),
         }
     }
 }
