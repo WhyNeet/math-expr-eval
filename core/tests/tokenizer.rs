@@ -4,7 +4,7 @@ use mee_core::tokenizer::{
 };
 
 #[test]
-pub fn check_if_working() {
+pub fn check_if_tokenizer_works() {
     let input = "1 + 2";
     let result = tokenize(input);
 
