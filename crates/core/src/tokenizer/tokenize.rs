@@ -4,36 +4,32 @@ pub fn tokenize(input: &str) -> Vec<Token> {
     let mut result = Vec::new();
 
     let input = input.replace(' ', "");
-    let input = input.chars();
+    let mut input = input.chars().peekable();
     let mut number_acc = String::new();
 
-    for val in input {
+    while let Some(val) = input.next() {
         match val {
             c if c.is_numeric() || (c == '.' && !number_acc.is_empty()) => {
                 number_acc.push(c);
+
+                if let Some(char) = input.peek() {
+                    if !char.is_numeric() {
+                        result.push(Token::Number(number_acc.parse().unwrap()));
+                        number_acc.clear();
+                    }
+                } else {
+                    result.push(Token::Number(number_acc.parse().unwrap()));
+                }
+
                 continue;
             }
-            parenthesis if parenthesis == '(' || parenthesis == ')' => {
-                if !number_acc.is_empty() {
-                    result.push(Token::Number(number_acc.parse().unwrap()));
-                    number_acc = String::new();
-                }
-
-                result.push(Token::Parenthesis(Parenthesis::from(parenthesis)));
+            '(' | ')' => {
+                result.push(Token::Parenthesis(Parenthesis::from(val)));
             }
             operation => {
-                if !number_acc.is_empty() {
-                    result.push(Token::Number(number_acc.parse().unwrap()));
-                    number_acc = String::new();
-                }
-
                 result.push(Token::Operation(Operation::from(operation)));
             }
         }
-    }
-
-    if !number_acc.is_empty() {
-        result.push(Token::Number(number_acc.parse().unwrap()));
     }
 
     result
