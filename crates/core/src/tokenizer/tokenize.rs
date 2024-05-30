@@ -9,7 +9,7 @@ pub fn tokenize(input: &str) -> Vec<Token> {
 
     for val in input {
         match val {
-            c if c.is_numeric() => {
+            c if c.is_numeric() || (c == '.' && !number_acc.is_empty()) => {
                 number_acc.push(c);
                 continue;
             }

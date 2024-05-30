@@ -6,7 +6,9 @@ use super::utils::is_weak_operation;
 
 impl PartialOrd for Operation {
     fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
-        if mem::discriminant(self) == mem::discriminant(other) {
+        if mem::discriminant(self) == mem::discriminant(other)
+            || is_weak_operation(self) && is_weak_operation(other)
+        {
             Some(Ordering::Equal)
         } else if is_weak_operation(self) || self.is_sentinel() {
             Some(Ordering::Less)

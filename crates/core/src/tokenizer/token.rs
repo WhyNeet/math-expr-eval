@@ -8,7 +8,7 @@ pub enum Operation {
     Sentinel,
 }
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Clone, Copy)]
 pub enum Parenthesis {
     Left,
     Right,
@@ -23,9 +23,23 @@ pub enum Token {
 }
 
 impl Token {
-    pub fn get_number(&self) -> Option<f64> {
+    pub fn as_number(&self) -> Option<f64> {
         match self {
             Token::Number(num) => Some(*num),
+            _ => None,
+        }
+    }
+
+    pub fn as_operation(&self) -> Option<Operation> {
+        match self {
+            Token::Operation(op) => Some(*op),
+            _ => None,
+        }
+    }
+
+    pub fn as_parenthesis(&self) -> Option<Parenthesis> {
+        match self {
+            Token::Parenthesis(par) => Some(*par),
             _ => None,
         }
     }

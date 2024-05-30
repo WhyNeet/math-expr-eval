@@ -1,30 +1,47 @@
-use crate::tokenizer::token::{Operation, Token};
-
 use super::tree::{Node, NodeValue};
+use crate::tokenizer::token::{Operation, Parenthesis, Token};
 
 pub fn parse(tokens: &[Token]) -> Node<dyn NodeValue> {
     if tokens.len() == 1 {
-        return Node::new(Box::new(tokens.first().unwrap().get_number().unwrap()));
+        return Node::new(Box::new(tokens.first().unwrap().as_number().unwrap()));
     }
+
+    // parentheses counter
+    // increment on every "("
+    // decrement on every ")"
+    let mut par_count = 0;
 
     let (operation, idx) = tokens
         .iter()
-        .map(|token| match token {
-            Token::Operation(operation) => Some(*operation),
-            _ => None,
-        })
         .enumerate()
-        .filter(|(_, token)| token.is_some())
-        .map(|(idx, token)| (idx, token.unwrap()))
+        .filter(|(_, token)| token.as_number().is_none())
+        .rev()
         .fold((Operation::Sentinel, 0), |acc, (idx, token)| {
             let (acc, acc_idx) = acc;
 
-            if acc.is_sentinel() || token < acc {
+            if let Some(par) = token.as_parenthesis() {
+                match par {
+                    Parenthesis::Left => par_count += 1,
+                    Parenthesis::Right => par_count -= 1,
+                    Parenthesis::Unknown(_) => unreachable!(),
+                }
+
+                return (acc, acc_idx);
+            }
+
+            let token = token.as_operation().unwrap();
+
+            if par_count == 0 && (acc.is_sentinel() || token < acc) {
                 return (token, idx);
             }
 
             (acc, acc_idx)
         });
+
+    // if the expression is surrounded by parentheses
+    if matches!(operation, Operation::Sentinel) {
+        return parse(&tokens[1..(tokens.len() - 1)]);
+    }
 
     let mut root = Node::<dyn NodeValue>::new(Box::new(operation));
     let left = parse(&tokens[..idx]);

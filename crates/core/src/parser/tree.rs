@@ -38,26 +38,26 @@ impl<V: NodeValue + ?Sized> Node<V> {
 }
 
 pub trait NodeValue: std::fmt::Debug {
-    fn get_number(&self) -> Option<f64>;
-    fn get_operation(&self) -> Option<Operation>;
+    fn as_number(&self) -> Option<f64>;
+    fn as_operation(&self) -> Option<Operation>;
 }
 
 impl NodeValue for Operation {
-    fn get_number(&self) -> Option<f64> {
+    fn as_number(&self) -> Option<f64> {
         None
     }
 
-    fn get_operation(&self) -> Option<Operation> {
+    fn as_operation(&self) -> Option<Operation> {
         Some(*self)
     }
 }
 
 impl NodeValue for f64 {
-    fn get_number(&self) -> Option<f64> {
+    fn as_number(&self) -> Option<f64> {
         Some(*self)
     }
 
-    fn get_operation(&self) -> Option<Operation> {
+    fn as_operation(&self) -> Option<Operation> {
         None
     }
 }
