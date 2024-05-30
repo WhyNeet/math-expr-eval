@@ -5,8 +5,6 @@ use super::error::ValidationError;
 pub fn validate(tokens: &[Token]) -> Result<(), ValidationError> {
     let mut par_counter = 0;
 
-    println!("{tokens:?} (length: {})", tokens.len());
-
     for (idx, token) in tokens.iter().enumerate() {
         match token {
             Token::Parenthesis(par) => match par {
@@ -19,7 +17,6 @@ pub fn validate(tokens: &[Token]) -> Result<(), ValidationError> {
                 }
                 _any => {
                     if idx == 0 || idx == tokens.len() - 1 {
-                        println!("syntax error: {token:?} at {idx} (total: {})", tokens.len());
                         return Err(ValidationError::SyntaxError);
                     }
 
