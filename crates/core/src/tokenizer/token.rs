@@ -12,7 +12,6 @@ pub enum Operation {
 pub enum Parenthesis {
     Left,
     Right,
-    Unknown(char),
 }
 
 #[derive(Debug, PartialEq)]
@@ -68,7 +67,7 @@ impl From<char> for Parenthesis {
         match value {
             '(' => Parenthesis::Left,
             ')' => Parenthesis::Right,
-            other => Parenthesis::Unknown(other),
+            _ => unreachable!(),
         }
     }
 }

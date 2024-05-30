@@ -23,7 +23,6 @@ pub fn parse(tokens: &[Token]) -> Node<dyn NodeValue> {
                 match par {
                     Parenthesis::Left => par_count += 1,
                     Parenthesis::Right => par_count -= 1,
-                    Parenthesis::Unknown(_) => unreachable!(),
                 }
 
                 return (acc, acc_idx);
