@@ -14,8 +14,7 @@ pub fn evaluate(tree: &Node<dyn NodeValue>) -> f64 {
         Operation::Subtract => evaluate(tree.left().unwrap()) - evaluate(tree.right().unwrap()),
         Operation::Multiply => evaluate(tree.left().unwrap()) * evaluate(tree.right().unwrap()),
         Operation::Divide => evaluate(tree.left().unwrap()) / evaluate(tree.right().unwrap()),
-        Operation::Unknown(op) => panic!("unknown operation: {op}"),
-        Operation::Sentinel => unreachable!(),
+        _ => unreachable!(),
     };
 
     res
