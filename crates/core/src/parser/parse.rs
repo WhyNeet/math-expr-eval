@@ -30,7 +30,7 @@ pub fn parse(tokens: &[Token]) -> Node<dyn NodeValue> {
 
             let token = token.as_operation().unwrap();
 
-            if par_count == 0 && (acc.is_sentinel() || token < acc) {
+            if par_count == 0 && token < acc {
                 return (token, idx);
             }
 
