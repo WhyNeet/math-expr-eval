@@ -1,12 +1,13 @@
 use mee_core::{
     parser::{self, parse},
-    tokenizer::{self, token::Operation, tokenize},
+    tokenizer::{token::Operation, Tokenize, Tokenizer},
 };
 
 #[test]
 pub fn check_if_parser_works() {
     let expr = "1 * 2 + 3";
-    let tokens = tokenize(expr);
+    let tokenizer = Tokenizer {};
+    let tokens = tokenizer.tokenize(expr);
 
     let ast = parse(&tokens);
 
@@ -57,7 +58,8 @@ pub fn check_if_parser_works() {
 #[test]
 pub fn check_if_parentheses_parsed() {
     let expr = "5 * (1 + 2)";
-    let tokens = tokenizer::tokenize(expr);
+    let tokenizer = Tokenizer {};
+    let tokens = tokenizer.tokenize(expr);
 
     let ast = parser::parse(&tokens);
 

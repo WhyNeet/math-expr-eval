@@ -1,5 +1,6 @@
 pub mod token;
 pub mod utils;
 
-mod tokenize;
-pub use tokenize::*;
+#[allow(clippy::module_inception)]
+mod tokenizer;
+pub use tokenizer::*;
